@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curise Booking</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!--Header and Menu Section-->
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a class="active" href="#">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!--Booking Section-->
+    <main class="main-content container">
+        <div class="text-center sms">
+            <h3>Book Ocean Time</h3>
+            <p id="sms"></p>
+            <button type="button" onclick="hideMe()" id="hide_me" class="btn btn-danger">Press ok to confirm
+                booking</button>
+        </div>
+        <div class="booking-content">
+            <h1>Cruise Queen</h1>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book./p>
+        </div>
+        <div class="booking-form">
+            <h3>Book Ocean Time</h3>
+            <div class="input-group">
+                <label for="">Flying From</label>
+                <input class="inp-style" type="text" name="" placeholder="Dhake, Bangladesh">
+            </div>
+            <div class="input-group">
+                <label for="">Flying To</label>
+                <input class="inp-style" type="text" name="" placeholder="New York, United States">
+            </div>
+            <div class="inputs">
+                <div class="input-group">
+                    <label" for="">Departure</label>
+                        <input class="inp-style" type="date" name="">
+                </div>
+                <div class="input-group">
+                    <label for="">Return</label>
+                    <input class="inp-style" type="date" name="">
+                </div>
+            </div>
+            <div class="input-group f-class">
+                <label for="">First Class ($150)</label>
+                <div class=" row ">
+                    <div class="d-flex justify-content-center">
+                        <button onclick="handleTicketChange('first', true)" id="first-class"
+                            class="btn btn-default col-md-2 inp-btn"><i class="fas fa-plus"></i></button>
+                        <input type="text" id="first-ticketNum" class="inp-style inp-width col-md-4" value="0">
+                        <button onclick="handleTicketChange('first', false)" id="economy-class"
+                            class="btn btn-default col-md-2 inp-btn"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group f-class">
+                <label for="">Economy ($100)</label>
+                <div class=" row ">
+                    <div class="d-flex justify-content-center">
+                        <button onclick=" handleTicketChange('eco', true);" class="btn btn-default col-md-2 inp-btn"><i
+                                class="fas fa-plus"></i></button>
+                        <input type="text" id="eco-ticketNum" class="inp-style inp-width col-md-4" value="0">
+                        <button onclick=" handleTicketChange('eco', false);" class="btn btn-default col-md-2 inp-btn"><i
+                                class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="calculations">
+                <div class="amount">
+                    <div class="left">
+                        <p>Subtotal</p>
+                    </div>
+                    <div class="right">
+                        <p id="totalCost">$00</p>
+                    </div>
+                </div>
+
+                <div class="amount">
+                    <div class="left">
+                        <p>Charge 10% VAT</p>
+                    </div>
+                    <div class="right">
+                        <p id="tax-amount">$00</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="amount">
+                    <div class="left">
+                        <h4>Total</h4>
+                    </div>
+                    <div class="right">
+                        <p id="grand-total">$00</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-style" onclick="confirmationSms()">Book Now</button>
+        </div>
+    </main>
+
+    <!--Thank You-->
+    <script>
+        // calculation of ticket numbers
+        function handleTicketChange(ticket, isIncrease) {
+            const f_ticketInput = document.getElementById(ticket + "-ticketNum");
+            const f_ticketNum = getInputValue(ticket);
+            let f_ticketCount = f_ticketNum;
+            if (isIncrease == true) {
+                f_ticketCount = f_ticketNum + 1;
+            }
+            if (isIncrease == false && f_ticketNum > 0) {
+                f_ticketCount = f_ticketNum - 1
+            }
+            f_ticketInput.value = f_ticketCount;
+            calculateTotalCost();
+        }
+
+        function getInputValue(ticket) {
+            const f_ticketInput = document.getElementById(ticket + "-ticketNum");
+            const f_ticketNum = parseInt(f_ticketInput.value);
+            return f_ticketNum;
+        }
+        // Calculation of tickets total cost
+        function calculateTotalCost() {
+            const fClassCount = getInputValue("first");
+            const eClassCount = getInputValue("eco");
+            const totalCost = fClassCount * 150 + eClassCount * 100;
+            document.getElementById("totalCost").innerText = '$' + totalCost;
+            const tax = Math.round(totalCost * 0.1);
+            document.getElementById("tax-amount").innerText = '$' + tax;
+            const grandTotal = totalCost + tax;
+            document.getElementById("grand-total").innerText = '$' + grandTotal;
+            return grandTotal;
+        }
+        //Confirmation message on booking
+        function confirmationSms() {
+            const fClassNum = getInputValue("first");
+            const eClassNum = getInputValue("eco");
+            const totalTicketNum = fClassNum + eClassNum;
+            document.getElementById("sms").innerHTML = 'You requested ' + totalTicketNum + ' ticket(s) and your total price is $' + calculateTotalCost();
+            const sms = document.querySelector(".sms");
+            sms.style.display = "block";
+            const hideMe = document.getElementById("hide_me");
+            hideMe.addEventListener("click", function () {
+                document.querySelector(".sms").style.display = "none";
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>
