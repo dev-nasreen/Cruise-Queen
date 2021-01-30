@@ -83,6 +83,9 @@ nav ul li a:hover, a.active{
 .booking-form  .input-group{
     margin: 10px 0;
 }
+label {
+    margin-bottom: 0;
+}
 .booking-form  .calculations{
     margin: 10px 0;
 }
